@@ -13,6 +13,12 @@ function Registration() {
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [showPassword, setShowPassword] = useState(false); // Add state for password visibility toggle
   const [showConfirmPassword, setShowConfirmPassword] = useState(false); // Add state for confirm password visibility toggle
+  const [formSubmitted, setFormSubmitted] = useState(false); // Track if form has been submitted
+  const [touched, setTouched] = useState({
+    email: false,
+    password: false,
+    confirmPassword: false
+  }); // Track which fields have been touched
   
   // Field validation states
   const [validations, setValidations] = useState({
@@ -20,6 +26,14 @@ function Registration() {
     password: { isValid: false, message: '' },
     confirmPassword: { isValid: false, message: '' }
   });
+  
+  // Handle field blur to mark fields as touched
+  const handleBlur = (field) => {
+    setTouched(prev => ({
+      ...prev,
+      [field]: true
+    }));
+  };
 
   // Validation rules
   const validateEmail = (email) => {
@@ -74,6 +88,7 @@ function Registration() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setFormSubmitted(true); // Mark form as submitted
     
     // Validate all fields before submission
     const emailValidation = validateEmail(email);
@@ -164,12 +179,13 @@ function Registration() {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onBlur={() => handleBlur('email')}
                 className={email && (validations.email.isValid ? 'valid' : 'invalid')}
                 placeholder=" "
                 required
               />
               <label htmlFor="email">Email</label>
-              {email && (
+              {email && touched.email && (
                 validations.email.isValid ? (
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="validation-icon valid">
                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
@@ -181,7 +197,7 @@ function Registration() {
                 )
               )}
             </div>
-            {validations.email.message && (
+            {(touched.email || formSubmitted) && validations.email.message && (
               <span className="field-error">{validations.email.message}</span>
             )}
           </div>
@@ -195,12 +211,13 @@ function Registration() {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onBlur={() => handleBlur('password')}
               className={password && (validations.password.isValid ? 'valid' : 'invalid')}
               placeholder=" "
               required
             />
             <label htmlFor="password">Password</label>
-            {password && (
+            {password && touched.password && (
               validations.password.isValid ? (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="validation-icon valid">
                   <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
@@ -227,7 +244,7 @@ function Registration() {
               )}
             </div>
           </div>
-          {validations.password.message && (
+          {(touched.password || formSubmitted) && validations.password.message && (
             <span className="field-error">{validations.password.message}</span>
           )}
         </div>
@@ -241,12 +258,13 @@ function Registration() {
               id="confirmPassword"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              onBlur={() => handleBlur('confirmPassword')}
               className={confirmPassword && (validations.confirmPassword.isValid ? 'valid' : 'invalid')}
               placeholder=" "
               required
             />
             <label htmlFor="confirmPassword">Confirm Password</label>
-            {confirmPassword && (
+            {confirmPassword && touched.confirmPassword && (
               validations.confirmPassword.isValid ? (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="validation-icon valid">
                   <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
@@ -273,7 +291,7 @@ function Registration() {
               )}
             </div>
           </div>
-          {validations.confirmPassword.message && (
+          {(touched.confirmPassword || formSubmitted) && validations.confirmPassword.message && (
             <span className="field-error">{validations.confirmPassword.message}</span>
           )}
         </div>
