@@ -24,21 +24,53 @@
 .form-group {
   margin-bottom: 15px;
   text-align: left;
+  position: relative;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: #555;
+  position: absolute;
+  top: 10px;
+  left: 40px; /* Account for the icon */
+  color: #888;
+  font-size: 16px;
+  transition: all 0.2s ease-out;
+  pointer-events: none;
+  font-weight: normal;
+  z-index: 1;
 }
 
 .form-group input {
   width: 100%;
   padding: 10px;
+  padding-top: 20px;
+  padding-bottom: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box; /* Include padding and border in element's total width and height */
+  font-size: 16px;
+}
+
+/* Floating label effect */
+.form-group input:focus,
+.form-group input:not(:placeholder-shown) {
+  padding-top: 20px;
+  padding-bottom: 8px;
+}
+
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label {
+  top: 2px;
+  left: 40px;
+  font-size: 12px;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.form-group input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
 .input-with-icon {
@@ -58,6 +90,25 @@
 
 .input-with-icon input {
   padding-left: 40px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 1;
+}
+
+.password-toggle svg {
+  width: 20px;
+  height: 20px;
+  fill: #888;
+}
+
+.password-toggle:hover svg {
+  fill: #555;
 }
 
 .auth-form button {
@@ -81,6 +132,51 @@
   margin-top: 20px;
   font-size: 14px;
   color: #666;
+}
+
+/* Validation icons */
+.validation-icon {
+  position: absolute;
+  right: 40px; /* Position to the left of password toggle if present */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  z-index: 2; /* Ensure it's above the floating label */
+}
+
+.validation-icon.valid {
+  fill: #28a745; /* Green for valid */
+}
+
+.validation-icon.invalid {
+  fill: #dc3545; /* Red for invalid */
+}
+
+/* Field-level error messages */
+.field-error {
+  color: #dc3545;
+  font-size: 0.85rem;
+  margin-top: 5px;
+  display: block;
+  text-align: left;
+  animation: fadeIn 0.3s;
+}
+
+/* Global error message */
+.error-message {
+  color: #dc3545;
+  background-color: rgba(220, 53, 69, 0.1);
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  text-align: left;
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .auth-form p a {
